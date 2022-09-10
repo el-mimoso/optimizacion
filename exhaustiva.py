@@ -23,13 +23,18 @@ def busquedaExhaustiva(h, inferior, superior):
     if h > 0:
         print("empezando por izquierda")
         i = np.arange(inferior, superior, h)
-        for paso in i:
-            f = ecuacion(paso)
-            fprima = derivada(paso)
-            print(f'k:{k}   h: %.2f     f(x):%.6f     f\'(x):%.6f' % (paso, f ,fprima))
-            k = k + 1
+        evaluar(k, i)
     elif h < 0:
         print("empezando por la derecha")
+        i = np.arange(superior, inferior, h)
+        evaluar(k, i)
+
+def evaluar(k, i):
+    for paso in i:
+        f = ecuacion(paso)
+        fprima = derivada(paso)
+        print(f'k:{k}   h: %.2f     f(x):%.6f     f\'(x):%.6f' % (paso, f ,fprima))
+        k = k + 1
 
 
 busquedaExhaustiva(.1, -0.4, 0.64)
