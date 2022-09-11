@@ -40,11 +40,11 @@ def evaluar(k, i):
         # Evaluamos en f(x) y en f´(x)
         f = ecuacion(paso)
         fprima = derivada(paso)
-        print(f'k:{k}   h: %.2f     f(x):%.6f     f\'(x):%.6f' %
+        print(f'k:{k}   x: %.2f     f(x):%.6f     f\'(x):%.6f' %
               (paso, f, fprima))
         # Almacenamos valores en Array
         miDiccionario[k] = round(fprima, 6)
-        tabla.append({'k': k, 'h': round(paso, 2),
+        tabla.append({'k': k, 'x': round(paso, 2),
                      'fx': round(f, 6), 'fp': round(fprima, 6)})
         k = k + 1
 
