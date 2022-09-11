@@ -8,6 +8,11 @@
 # En todos los casos reportar las iteraciones. así como los valores de x, f(x) y f'(x) en cada iteración.
 import numpy as np
 import math
+import pprint
+
+
+tabla = []
+miDiccionario = {}
 
 
 def ecuacion(x):
@@ -21,20 +26,37 @@ def derivada(x):
 def busquedaExhaustiva(h, inferior, superior):
     k = 0
     if h > 0:
-        print("empezando por izquierda")
+        print("<=== Empezando por izquierda ==>\n")
         i = np.arange(inferior, superior, h)
         evaluar(k, i)
     elif h < 0:
-        print("empezando por la derecha")
+        print("<=== Empezando por la derecha ===>\n")
         i = np.arange(superior, inferior, h)
         evaluar(k, i)
 
+
 def evaluar(k, i):
     for paso in i:
+        # Evaluamos en f(x) y en f´(x)
         f = ecuacion(paso)
         fprima = derivada(paso)
-        print(f'k:{k}   h: %.2f     f(x):%.6f     f\'(x):%.6f' % (paso, f ,fprima))
+        print(f'k:{k}   h: %.2f     f(x):%.6f     f\'(x):%.6f' %
+              (paso, f, fprima))
+        # Almacenamos valores en Array
+        miDiccionario[k] = round(fprima, 6)
+        tabla.append({'k': k, 'h': round(paso, 2),
+                     'fx': round(f, 6), 'fp': round(fprima, 6)})
         k = k + 1
 
 
 busquedaExhaustiva(.1, -0.4, 0.64)
+min = sorted(miDiccionario.items(), key=lambda x: abs(0 - x[1]))
+# imprimir los valores por cercanía a 0
+# pprint.pprint(min)
+# print(min[0][1])
+
+# pprint.pprint(sorted(tabla, key=lambda x: x['f',0], reverse=True))
+print(
+    f'\nMínimo encontrado en la iteración: {min[0][0]} \nCon los siguientes valores: ')
+# accedemos al Array con el valor minimo de midiccionario
+pprint.pprint(tabla[min[0][0]])
