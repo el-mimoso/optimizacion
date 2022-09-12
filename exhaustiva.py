@@ -1,11 +1,8 @@
 # 1. Hacer las programación de los métodos de búsqueda exhaustiva y razón dorada
-# 2. Para la función
 # f(x) = 10 - cos ^ 2(x-0.1)
 # calcular el mínimo en el intervalo[-0.4, 0.65] utilizando los métodos
 # a) búsqueda exhaustiva con x ^ (0)=-0.4  y h=0.1
-# b) utilizando razón dorada calcular el mínimo en el intervalo
 # c) cuantas iteraciones de búsqueda exhaustiva son necesaria para tener un resultado equivalente al resultado de razón dorada
-# En todos los casos reportar las iteraciones. así como los valores de x, f(x) y f'(x) en cada iteración.
 import numpy as np
 import math
 import pprint
@@ -40,8 +37,7 @@ def evaluar(k, i):
         # Evaluamos en f(x) y en f´(x)
         f = ecuacion(paso)
         fprima = derivada(paso)
-        print(f'k:{k}   x: %.2f     f(x):%.6f     f\'(x):%.6f' %
-              (paso, f, fprima))
+        print(f'k:{k}   x: {round(paso,6)}     f(x):{round(f,6)}    f\'(x):{round(fprima,6)}')
         # Almacenamos valores en Array
         miDiccionario[k] = round(fprima, 6)
         tabla.append({'k': k, 'x': round(paso, 2),
