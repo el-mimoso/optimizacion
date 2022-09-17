@@ -13,11 +13,11 @@ miDiccionario = {}
 
 
 def ecuacion(x):
-    return 10 - math.cos(x - 0.1)**2
+    return -2*math.sin(x) + x**2/10
 
 
 def derivada(x):
-    return 2*math.sin(x-0.1)*math.cos(x-0.1)
+    return -2*math.cos(x) + x/5
 
 
 def busquedaExhaustiva(h, inferior, superior):
@@ -45,7 +45,7 @@ def evaluar(k, i):
         k = k + 1
 
 
-busquedaExhaustiva(.1, -0.4, 0.64)
+busquedaExhaustiva(.01, 0, 2.01)
 min = sorted(miDiccionario.items(), key=lambda x: abs(0 - x[1]))
 # imprimir los valores por cercanía a 0
 # pprint.pprint(min)

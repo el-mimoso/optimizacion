@@ -10,11 +10,11 @@ R = (-1 + 5 ** 0.5) / 2
 
 
 def ecuacion(x):
-    return 10 - math.cos(x - 0.1)**2
+    return -2*math.sin(x) + x**2/10
 
 
 def derivada(x):
-    return 2*math.sin(x-0.1)*math.cos(x-0.1)
+    return -2*math.cos(x) + x/5
 
 
 def razonDorada(xl, xu):
@@ -73,4 +73,4 @@ def imprimir(xl, xu, k, d, x1, x2, fxl, fxu, fx1, fx2):
             f' x: {round(x2,6)} f(x): {round(derivada(x2),6)}   f\'(x): {round(derivada(x2),6)}')
 
 
-razonDorada(-0.4, 0.64)
+razonDorada(0, 2)
