@@ -1,3 +1,4 @@
+from cProfile import label
 import matplotlib.pyplot as plt
 import numpy as np
 import math
@@ -31,15 +32,13 @@ def dirgrad(x1, x2):
     p = -vgrad/magGrad
     return p
 
-
+# pasar p para graficar, d para evaluar en cierto punto.
 def phiAlpha(x0, x, d):
     paX1 = x0[0] + x * d[0]
     paX2 = x0[1] + x * d[1]
     print(paX1)
     print(paX2)
-
     # phiAl = x0 + x * d
-    # return phiAl
     return f(paX1, paX2)
 
 
@@ -49,8 +48,8 @@ p = dirgrad(x0[0], x0[1])
 d = p*-1
 
 # DEBUGG
-print("probando en phi de alfa: ")
-phiAlpha(x0, -0.952194, d)
+# print("probando en phi de alfa: ")
+# phiAlpha(x0, -0.952194, d)
 # print(phiAlpha(x0, -0.952194, d))
 #retorna -0.4039332232588827
 
@@ -74,7 +73,7 @@ fx = np.vectorize(fx)
 
 
 x = np.linspace(0, 2, 50)
-plt.plot(x, phiAlpha(x0, x, d), 'g--')
 # plt.plot(x, fx(x), 'g--')
+plt.plot(x, phiAlpha(x0, x, p), 'b', label="phi(alpha)")
 plt.grid()
 plt.show()
