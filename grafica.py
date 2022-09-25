@@ -1,12 +1,10 @@
-from cProfile import label
 import matplotlib.pyplot as plt
 import numpy as np
 import math
 
 
 # función original f(x) = x_1 e^(-x_1^2 - x_2^2)
-
-# xini = []
+# xini  [-1,-1]
 
 def f(x1, x2):
     a = (np.e**(-x1**2 - x2**2))*x1
@@ -36,10 +34,28 @@ def dirgrad(x1, x2):
 def phiAlpha(x0, x, d):
     paX1 = x0[0] + x * d[0]
     paX2 = x0[1] + x * d[1]
-    print(paX1)
-    print(paX2)
-    # phiAl = x0 + x * d
     return f(paX1, paX2)
+
+
+def phipAlpha(x0, x, p):
+    val=[]
+    for alpha in x:
+        x1 = x0[0] + alpha * p[0]
+        x2 = x0[0] + alpha * p[1]
+        vgrad = grad(x1, x2)
+        val.append(np.dot(vgrad,p))
+    return val
+
+
+def phipp(x0, alpha,p):
+    val = []
+    for a in alpha:
+        x1 = x0[0] + a * p[0]
+        x2 = x0[0] + a * p[1]
+        ahess = hessiano(x1, x2)
+        val.append(np.dot(np.dot(ahess,p),p)) 
+    return val
+
 
 
 x0List = [-1, -1]
@@ -74,6 +90,11 @@ fx = np.vectorize(fx)
 
 x = np.linspace(0, 2, 50)
 # plt.plot(x, fx(x), 'g--')
+
+
 plt.plot(x, phiAlpha(x0, x, p), 'b', label="phi(alpha)")
+plt.plot(x, phipAlpha(x0, x, p), 'g', label="phi'(alpha)")
+plt.plot(x, phipp(x0, x, p), 'r', label="phi''(alpha)")
+plt.legend(loc=2)
 plt.grid()
 plt.show()
