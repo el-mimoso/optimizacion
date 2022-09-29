@@ -10,7 +10,7 @@ R = (-1 + 5 ** 0.5) / 2
 
 
 def ecuacion(x):
-    return -2*math.sin(x) + x**2/10
+    return (-1+x/math.sqrt(5))*math.e**(-(-1+((2*x)/math.sqrt(5)))**2 - (-1+(x/math.sqrt(5)))**2)
 
 
 def derivada(x):
@@ -67,10 +67,10 @@ def imprimir(xl, xu, k, d, x1, x2, fxl, fxu, fx1, fx2):
     print(f'k:{k}   xl:{round(xl, 6)}  f(xl): {round(fxl, 6)}   x2:{round(x2, 6)}  f(x2):{round(fx2, 6)}  x1:{round(x1, 6)}   f(x1):{round(fx1, 6)}   xu:{round(xu, 6)}   f(xu):{round(fxu, 6)}   d:{round(d, 6)}')
     if fx1 > fx2:
         print(
-            f' x: {round(x1,6)} f(x): {round(derivada(x1),6)}   f\'(x): {round(derivada(x1),6)}')
+            f' x: {round(x1,6)} f(x): {round(ecuacion(x1),6)}   f\'(x): {round(derivada(x1),6)}')
     elif fx2 > fx1:
         print(
-            f' x: {round(x2,6)} f(x): {round(derivada(x2),6)}   f\'(x): {round(derivada(x2),6)}')
+            f' x: {round(x2,6)} f(x): {round(ecuacion(x2),6)}   f\'(x): {round(derivada(x2),6)}')
 
 
-razonDorada(0, 2)
+razonDorada(0.75, 1.25)
