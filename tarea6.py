@@ -56,14 +56,15 @@ def phipp(x0, alpha, p):
     return np.dot(np.dot(ahess, p), p)
 
 
-def st(x0, p,a, a0=1):
+def st(x0, p, a, a0=1):
     # C = phiAlpha(x0, a0, p)
     # B = phipAlpha(x0, a0, p)
     # numerador = (phiAlpha(x0, a1, p) - phipAlpha(x0, a0, p)*(a1-a0) - phiAlpha(x0, a0, p))
     # denominador = (a1-a0)**2
     # A = numerador/denominador
     # print(A)
-    return phiAlpha(x0,a0,p)+(phipAlpha(x0,a0,p)*(a-a0))+((phipp(x0, a0, p)*(a-a0)**2)/2)
+    return phiAlpha(x0, a0, p)+(phipAlpha(x0, a0, p)*(a-a0))+((phipp(x0, a0, p)*(a-a0)**2)/2)
+
 
 x0List = [-1, -1]
 x0 = np.array(x0List)
