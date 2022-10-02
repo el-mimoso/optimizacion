@@ -119,7 +119,7 @@ def phipp(x0, alpha, p):
     return np.dot(np.dot(ahess, p), p)
 
 
-def newton(xo, p, ao, itmax=10, tol=1e-6):
+def newton(xo, p, ao, itmax=100, tol=1e-5):
     k = 0
     while abs(phipAlpha(xo, ao, p)) > tol:
         phiap = phipAlpha(xo, ao, p)
@@ -137,6 +137,11 @@ def interpolacion(xo, p, a1, ao=0):
     phi0 = phiAlpha(xo, ao, p)
     phi1 = phiAlpha(xo, a1, p)
     phip0 = phipAlpha(xo, ao, p)
+    print(phi0, phi1, phip0)
+    # print("superior")
+    # print(phip0*(a1-ao)**2)
+    # print("inferior")
+    # print(2*(phi1-phi0-(phip0*(a1-ao))))
     return ao - (phip0*(a1-ao)**2)/(2*(phi1-phi0-(phip0*(a1-ao))))
 
 
@@ -150,12 +155,14 @@ def maximoDescenso(xini):
 
 xini = [-1, -1]
 p = dirgrad(xini[0], xini[1])
-# print("<==Exhaustivo==>")
-# a = exhaustivo(p, xini)
-# print(a)
-# print("<==Razón Dorada==>")
-# razonDorada(0, 2, p, xini)
+print("<==Exhaustivo==>")
+a = exhaustivo(p, xini)
+print(a)
+print("<==Razón Dorada==>")
+razonDorada(0, 2, p, xini)
 print("<==Metodo de Newton==>")
-print(newton(xini, p, 0))
-# print("<==Iterpolación==>")
-# print(interpolacion(xini, p, 0.3))
+newton(xini, p, 0)
+print("<==Máximo Descenso==>")
+print(maximoDescenso(xini))
+print("<==Iterpolación==>")
+print(interpolacion(xini, p, 0.30001))
