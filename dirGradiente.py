@@ -39,7 +39,9 @@ def hessiano(x, y):
 
 
 def exhaustivo(p, xini, alpha=0, h=0.05,):
-    """Busqueda de minimo con metodo exaustivo. puedes cambiar el paso"""
+    """Busqueda de minimo con metodo exaustivo. puedes cambiar el paso. 
+    Retorna f(a) y alpha
+    """
     k = 0
     fantes = f(xini[0], xini[1])
     while True:
@@ -49,10 +51,25 @@ def exhaustivo(p, xini, alpha=0, h=0.05,):
         print(k, x[0], x[1], alpha, fnow)
         k = k+1
         if (fnow > fantes):
-            return fantes
+            return fantes , alpha
             break
         fantes = fnow
 
+
+def exhaustivoRefinado(p, xini, alpha=0, h=0.1, tol = 1e-6):
+    """Busqueda de minimo con metodo exhaustivo refinado. puedes cambiar el paso
+    Retorna f(a) y alpha
+    """
+    k = 0
+    while h > tol:
+        while phiAlpha(xini, alpha+h, p) < phiAlpha(xini, alpha, p):
+            alpha = alpha + h
+            fnow = phiAlpha(xini,alpha,p)
+            print(k, h, fnow)
+            k+= 1
+        alpha = alpha-h
+        h = h /10
+    return fnow, alpha
 
 def razonDorada(aLow, aUp, p, xini, tol=1e-6):
     print(f"<=== Calculado con Tol: {tol}  ===>\n")
@@ -156,13 +173,13 @@ def maximoDescenso(xini):
 xini = [-1, -1]
 p = dirgrad(xini[0], xini[1])
 print("<==Exhaustivo==>")
-a = exhaustivo(p, xini)
+a = exhaustivoRefinado(p, xini)
 print(a)
-print("<==Razón Dorada==>")
-razonDorada(0, 2, p, xini)
-print("<==Metodo de Newton==>")
-newton(xini, p, 0)
-print("<==Máximo Descenso==>")
-print(maximoDescenso(xini))
-print("<==Iterpolación==>")
-print(interpolacion(xini, p, 0.30001))
+# print("<==Razón Dorada==>")
+# razonDorada(0, 2, p, xini)
+# print("<==Metodo de Newton==>")
+# newton(xini, p, 0)
+# print("<==Máximo Descenso==>")
+# print(maximoDescenso(xini))
+# print("<==Iterpolación==>")
+# print(interpolacion(xini, p, 0.30001))
