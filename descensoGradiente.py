@@ -1,66 +1,78 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import math
-
+from timeit import default_timer as timer
 
 # función original f(x) = x_1 e^(-x_1^2 - x_2^2)
 # xini  [-1,-1]
 
-def f(x1, x2):
-    a = (np.e**(-x1**2 - x2**2))*x1
-    return a
+
+def f(x):
+    f = 0
+    y = [1, 2, 3, 4, 5, 4, 3, 2, 1, 0]
+    for i in range(10):
+        aux = x[i] - y[i]
+        f += aux**2
+        if i > 0:
+            aux = x[i]-x[i-1]
+            f += 2.5*aux**2
+    return f
 
 
 # gradiente  ∇f
-def grad(x1, x2):
-    list1 = [1-2*x1**2, -2*x1*x2]
-    descenso = np.array(list1)*math.e**(-x1**2 - x2**2)
-    return descenso
+def grad(x):
+    # list1 = [1-2*x[0]**2, -2*x[0]*x[1]]
+    # descenso = np.array(list1)*math.e**(-x[0]**2 - x[1]**2)
+    # return descenso
+    y = [1, 2, 3, 4, 5, 4, 3, 2, 1, 0]
+    g = np.array([None]*10)
+    for i in range(10):
+        g[i] = 2.0*(x[i]-y[i])
+        if i > 0:
+            g[i] += 5*(x[i]-x[i-1])
+        if i < 10-1:
+            g[i] += 5*(x[i]-x[i+1])
+    return g
+
+
+def hessiano(x):
+    # return axay
+    return np.array([
+        [7, -5, 0, 0, 0, 0, 0, 0, 0, 0],
+        [-5, 12, -5, 0, 0, 0, 0, 0, 0, 0],
+        [0, -5, 12, -5, 0, 0, 0, 0, 0, 0],
+        [0, 0, -5, 12, -5, 0, 0, 0, 0, 0],
+        [0, 0, 0, -5, 12, -5, 0, 0, 0, 0],
+        [0, 0, 0, 0, -5, 12, -5, 0, 0, 0],
+        [0, 0, 0, 0, 0, -5, 12, -5, 0, 0],
+        [0, 0, 0, 0, 0, 0, -5, 12, -5, 0],
+        [0, 0, 0, 0, 0, 0, 0, -5, 12, -5],
+        [0, 0, 0, 0, 0, 0, 0, 0, -5, 7]
+    ])
 
 
 # dirección del gradiente p
-def dirgrad(x1, x2):
-    vgrad = grad(x1, x2)
+def dirgrad(x):
+    vgrad = grad(x)
     magGrad = np.sqrt(vgrad.dot(vgrad))
     p = -vgrad/magGrad
     return p
 
 
 def phiAlpha(x0, alpha, p):
-    paX1 = x0[0] + p[0] * alpha
-    paX2 = x0[1] + p[1] * alpha
-    return f(paX1, paX2)
+    paX = x0 + p * alpha
+    return f(paX)
 
 
 def phipAlpha(x0, alpha, p):
-    x1 = x0[0] + alpha * p[0]
-    x2 = x0[0] + alpha * p[1]
-    vgrad = grad(x1, x2)
+    x = x0 + alpha * p
+    vgrad = grad(x)
     return(np.dot(vgrad, p))
 
 
 def phipp(x0, alpha, p):
-    val = []
-    for a in alpha:
-        x1 = x0[0] + a * p[0]
-        x2 = x0[0] + a * p[1]
-        ahess = hessiano(x1, x2)
-        val.append(np.dot(np.dot(ahess, p), p))
-    return val
-
-
-def hessiano(x, y):
-    axax = (2*x*((2*x**2)-3))*math.e**(-(x**2) - (y**2))
-    ayay = (2*x*((2*y**2) - 1))*math.e**(-(x**2) - (y**2))
-    axay = 2*(2*x**2 - 1)*y*math.e**(-x**2 - y**2)
-    # return axay
-    return np.array([
-        [axax, axay],
-        [axay, ayay]
-    ])
-
-
-f = np.vectorize(f)
+    x = x0 + alpha * p
+    ahess = hessiano(x)
+    return np.dot(np.dot(ahess, p), p)
 
 
 # c1 1*10-4
@@ -105,42 +117,31 @@ def exhaustivoRefinado(p, xini, alpha=0, h=0.1, tol=1e-6):
 
 
 def gradDescent(x0, k=0, tol=1e-4):
-    print("k, x^(k), p^(k), f(x^(k), θ")
-    op = dirgrad(x0[0], x0[1])
-    while np.linalg.norm(grad(x0[0], x0[1])) >= tol:
-        p = dirgrad(x0[0], x0[1])
+    print("k, x^(k), p^(k), f(x^(k), θ, t")
+    op = dirgrad(x0)
+    while np.linalg.norm(grad(x0)) >= tol:
+        p = dirgrad(x0)
         alpha = exhaustivoRefinado(p, x0)
         # print(f"a: {alpha}")
         x0 = x0 + alpha*p
         if k >= 1:
             angulo = np.arccos(np.dot(op, p))
             op = p
-            print(f"{k}, {x0}, {p} , {f(x0[0],x0[1])}, {round(np.degrees(angulo),6)} ")
+            print(f"{k}, {x0}, {p} , {f(x0)}, {round(np.degrees(angulo),6)}, {timer()} ")
         else:
-            print(f"{k}, {x0}, {p} , {f(x0[0],x0[1])}, - ")
+            print(f"{k}, {x0}, {p} , {f(x0)}, - , {timer()}")
 
         k = k+1
 
 
 x = np.linspace(0, 2, 50)
-x0List = [-1, -1]
+x0List = [1, 2, 3, 4, 5, 4, 3, 2, 1, 0]
 x0 = np.array(x0List)
+start = timer()
+print(start)
 gradDescent(x0)
-p = dirgrad(x0[0], x0[1])
+end = timer()
+print(end)
+print(f"Tiempo de ejecución: {end-start} s")
+p = dirgrad(x0)
 
-rwlf = []
-pphi = []
-
-for alpha in x:
-    rwlf.append(rectaWlf(x0, alpha, p, 1e-4))
-    cwlf = cw(x0, p*-1, alpha)
-    pphi.append(phipAlpha(x0, alpha, p))
-    # print(
-    # f"alpha:{round(alpha,4)} curva: {cwlf[0]} armijo: {cwlf[1]}  wolfe: {cwlf[2]}")
-
-
-# plt.plot(x, phiAlpha(x0, x, p), 'b', label="phi(alpha)")
-# # plt.plot(x, pphi, 'r--', label="phi(alpha)")
-# plt.plot(x, rwlf, 'b--', label="phi(alpha)")
-# plt.grid()
-# plt.show()
