@@ -7,7 +7,9 @@ import math
 # xini  [-1,-1]
 
 def f(x1, x2):
-    a = (np.e**(-x1**2 - x2**2))*x1
+    a = x1**2+2*x2**2 - \
+        math.cos(3*math.pi*x1)-math.cos(4*math.pi*x2)+0.7
+
     return a
 
 
@@ -17,9 +19,10 @@ def fx(x):
 
 
 # gradiente  ∇f
-def grad(x1, x2):
-    list1 = [1-2*x1**2, -2*x1*x2]
-    descenso = np.array(list1)*math.e**(-x1**2 - x2**2)
+def grad(x, y):
+    list1 = [2*x + 9.42477796076938*math.sin(9.42477796076938*x),
+             4*x + 12.5663706143592*math.sin(12.5663706143592*y)]
+    descenso = np.array(list1)
     return descenso
 
 
@@ -38,29 +41,29 @@ def phiAlpha(x0, x, d):
 
 
 def phipAlpha(x0, x, p):
-    val=[]
+    val = []
     for alpha in x:
         x1 = x0[0] + alpha * p[0]
         x2 = x0[0] + alpha * p[1]
         vgrad = grad(x1, x2)
-        val.append(np.dot(vgrad,p))
+        val.append(np.dot(vgrad, p))
     return val
 
 
-def phipp(x0, alpha,p):
+def phipp(x0, alpha, p):
     val = []
     for a in alpha:
         x1 = x0[0] + a * p[0]
         x2 = x0[0] + a * p[1]
         ahess = hessiano(x1, x2)
-        val.append(np.dot(np.dot(ahess,p),p)) 
+        val.append(np.dot(np.dot(ahess, p), p))
     return val
 
 
-
-x0List = [-1, -1]
+x0List = [2, 3]
 x0 = np.array(x0List)
 p = dirgrad(x0[0], x0[1])
+print(p)
 d = p*-1
 
 # DEBUGG
@@ -88,13 +91,13 @@ def hessiano(x, y):
 fx = np.vectorize(fx)
 
 
-x = np.linspace(0, 2, 50)
+x = np.linspace(0, 3, 100)
 # plt.plot(x, fx(x), 'g--')
 
 
 plt.plot(x, phiAlpha(x0, x, p), 'b', label="phi(alpha)")
 plt.plot(x, phipAlpha(x0, x, p), 'g', label="phi'(alpha)")
 plt.plot(x, phipp(x0, x, p), 'r', label="phi''(alpha)")
-plt.legend(loc=2)
+plt.legend(loc=1)
 plt.grid()
 plt.show()

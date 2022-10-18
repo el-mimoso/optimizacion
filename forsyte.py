@@ -9,49 +9,22 @@ from timeit import default_timer as timer
 # xini  [-1,-1]
 
 def f(x):
-    f = 0
-    y = [1, 2, 3, 4, 5, 4, 3, 2, 1, 0]
-    for i in range(10):
-        aux = x[i] - y[i]
-        f += aux**2
-        if i > 0:
-            aux = x[i]-x[i-1]
-            f += 2.5*aux**2
+    f = x[0]**2+2*x[1]**2-math.cos(3*math.pi*x[0])-math.cos(4*math.pi*x[1])+0.7
     return f
 
 
 # gradiente  ∇f
 def grad(x):
-    # list1 = [1-2*x[0]**2, -2*x[0]*x[1]]
-    # descenso = np.array(list1)*math.e**(-x[0]**2 - x[1]**2)
-    # return descenso
-    y = [1, 2, 3, 4, 5, 4, 3, 2, 1, 0]
-    g = np.array([None]*10)
-    for i in range(10):
-        g[i] = 2.0*(x[i]-y[i])
-        if i > 0:
-            g[i] += 5*(x[i]-x[i-1])
-        if i < 10-1:
-            g[i] += 5*(x[i]-x[i+1])
+    g = np.array([2*x[0] + 9.42477796076938*math.sin(9.42477796076938*x[0]),
+                  4*x[1] + 12.5663706143592*math.sin(12.5663706143592*x[1])])
     return g
 
 
-# gradiente  ∇^2f
 def hessiano(x):
-    # return axay
     return np.array([
-        [7, -5, 0, 0, 0, 0, 0, 0, 0, 0],
-        [-5, 12, -5, 0, 0, 0, 0, 0, 0, 0],
-        [0, -5, 12, -5, 0, 0, 0, 0, 0, 0],
-        [0, 0, -5, 12, -5, 0, 0, 0, 0, 0],
-        [0, 0, 0, -5, 12, -5, 0, 0, 0, 0],
-        [0, 0, 0, 0, -5, 12, -5, 0, 0, 0],
-        [0, 0, 0, 0, 0, -5, 12, -5, 0, 0],
-        [0, 0, 0, 0, 0, 0, -5, 12, -5, 0],
-        [0, 0, 0, 0, 0, 0, 0, -5, 12, -5],
-        [0, 0, 0, 0, 0, 0, 0, 0, -5, 7]
+        [88.8264396098042*math.cos(9.42477796076938*x[0]) + 2, 0],
+        [0, 157.91367041743*math.cos(12.5663706143592*x[1]) + 4]
     ])
-
 
 # dirección del gradiente p
 def dirgrad(x):
@@ -78,7 +51,7 @@ def phipp(x0, alpha, p):
     return np.dot(np.dot(ahess, p), p)
 
 
-def exhaustivoRefinado(p, xini, alpha=0, h=0.1, tol=1e-6):
+def exhaustivoRefinado(p, xini, alpha=0, h=0.1, tol=1e-9):
     """Busqueda de minimo con metodo exhaustivo refinado. puedes cambiar el paso
     Retorna f(a) y alpha
     """
@@ -102,26 +75,27 @@ def gradDescent(x0):
     return x0
 
 
-def forsyte(x0, k=0, m=0, tol=1e-4):
+def forsyte(x0, k=0, m=0, tol=1e-2):
     """Algoritmo de forsyte."""
-    print("k, x^(k), p^(k), f(x^k), t")
+    print("k, x ^ (k), f(x ^ (k), pk")
     while np.linalg.norm(grad(x0)) >= tol:
         x1 = gradDescent(x0)
         x2 = gradDescent(x1)
-        y = x2
+        x3 = gradDescent(x2)
+        y = x3
         d = (y - x0)/np.linalg.norm(y - x0)
         alpha = exhaustivoRefinado(d, x0)
         # TODO: buscar alpha con newton para mayor precisión ?
         # print(f"alpha: {alpha}")
         x0 = x0 + alpha*d
         itTime = timer()
-        print(f"{k}, {x0}, {d} , {f(x0)},{itTime}")
+        print(f"{k}, {x0}, {f(x0)}, {d} ")
         k = k + 1
     return x0
 
 
-x0 = [1, 2, 3, 4, 5, 4, 3, 2, 1, 0]
-
+x0 = [2, 3]
+print("Forsyte")
 start = timer()
 print(start)
 xfin = forsyte(x0)
