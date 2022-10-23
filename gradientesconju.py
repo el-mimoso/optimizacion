@@ -103,20 +103,26 @@ def gradienteConjugado(x0, b, k=0, tol=1e-6):
     p = r*-1
     print(x0)
     print("x0, f(x^k), aMD, b")
+    rDotr = np.dot(r, r)
+    AdotP = np.dot(hessiano(x0), p)
     while np.linalg.norm(grad(x0)) >= tol:
-        alpha = np.dot(r, r) / np.dot(np.dot(hessiano(x0), p), p)
+        alpha = rDotr / np.dot(AdotP, p)
         x0 = x0 + alpha*p
-        r1 = r + alpha * np.dot(hessiano(x0), p)
-        b = (np.dot(r1,r1))/(np.dot(r,r))
+        r1 = r + alpha * AdotP
+        b = (np.dot(r1,r1))/rDotr
         p = -r1 + b*p
         print(x0, f(x0), alpha, b)
         r = r1
+        rDotr = np.dot(r, r)
+        AdotP = np.dot(hessiano(x0), p)
     return x0
 
 
 x0 = np.array([20, 30])
 b = [-3, 4]
+print("<==Preliminar==>")
 print(gradConjugadoPreliminar(x0, b))
+print("<==Conjugado==>")
 print(gradienteConjugado(x0,b))
 
 
